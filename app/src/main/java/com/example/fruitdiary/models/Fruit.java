@@ -1,4 +1,4 @@
-package com.example.fruitdiary;
+package com.example.fruitdiary.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,11 +1,8 @@
 package com.example.fruitdiary.presenters;
 
-import android.app.Activity;
 import android.util.Log;
 
-import androidx.core.util.Consumer;
-
-import com.example.fruitdiary.Fruit;
+import com.example.fruitdiary.models.Fruit;
 import com.example.fruitdiary.RetrofitClient;
 
 import java.util.List;

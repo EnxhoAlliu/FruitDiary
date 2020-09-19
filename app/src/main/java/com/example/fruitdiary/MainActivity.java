@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import com.example.fruitdiary.presenters.EntryPresenter;
 import com.example.fruitdiary.presenters.FruitPresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                             requestCode);
         }else{
             new FruitPresenter();
+            new EntryPresenter();
         }
     }
 
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == this.requestCode){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 new FruitPresenter();
+                new EntryPresenter();
             }
         }
     }
