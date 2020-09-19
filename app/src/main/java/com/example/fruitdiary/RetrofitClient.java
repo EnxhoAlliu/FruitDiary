@@ -19,7 +19,7 @@ public class RetrofitClient {
     private static Retrofit retrofitClient;
     private Gson gson = new GsonBuilder().setLenient().create();
 
-    public static APIService getInstance(){
+    public static APIService getAPIService(){
         if(retrofitClient == null){
             retrofitClient = new RetrofitClient().createRetrofitClient();
         }

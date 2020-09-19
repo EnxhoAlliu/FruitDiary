@@ -23,6 +23,9 @@ import com.example.fruitdiary.ui.main.SectionsPagerAdapter;
 
 import java.security.Permission;
 
+import toothpick.Scope;
+import toothpick.Toothpick;
+
 public class MainActivity extends AppCompatActivity {
 
     private String internetPermission = Manifest.permission.INTERNET;
@@ -37,33 +40,15 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        checkPermissions();
 
+        initToothPick();
 
     }
 
-
-    public void checkPermissions() {
-
-        // Checking if permission is not granted
-        if (checkSelfPermission(internetPermission) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                            new String[]{internetPermission},
-                            requestCode);
-        }else{
-            new FruitPresenter();
-            new EntryPresenter();
-        }
+    private void initToothPick(){
+        Scope appScope = Toothpick.openScope(this);
+        Toothpick.inject(this, appScope);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == this.requestCode){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                new FruitPresenter();
-                new EntryPresenter();
-            }
-        }
-    }
+
 }

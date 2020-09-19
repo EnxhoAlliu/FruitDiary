@@ -43,4 +43,8 @@ dependencies {
         exclude group: "com.android.support"
     }
 
+    implementation 'com.github.stephanenicolas.toothpick:toothpick-runtime:3.1.0'
+    // and for android -> implementation 'com.github.stephanenicolas.toothpick:smoothie-androidx:3.x'
+    annotationProcessor 'com.github.stephanenicolas.toothpick:toothpick-compiler:3.1.0'
+
 }
