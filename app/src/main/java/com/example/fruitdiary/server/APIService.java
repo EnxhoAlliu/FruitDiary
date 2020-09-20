@@ -7,7 +7,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 
 public interface APIService {
@@ -22,6 +24,13 @@ public interface APIService {
     void deleteAllEntries();
 
     @DELETE("api/entry/{entryId}")
-    void deleteSpecificEntry(
+    Call<Object> deleteSpecificEntry(
             @Path("entryId") int entryID);
+
+    @POST("api/entry/{entryId}/fruit/{fruitId}")
+    Call<Object> addFruitToEntry(
+            @Path("entryId") int entryID,
+            @Path("fruitId") int fruitID,
+            @Query("amount") int amount
+    );
 }

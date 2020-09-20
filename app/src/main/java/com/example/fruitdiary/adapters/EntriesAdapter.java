@@ -53,17 +53,18 @@ public class EntriesAdapter extends  RecyclerView.Adapter<EntriesAdapter.MyViewH
             super(itemView);
             fruitRecyclerView = itemView.findViewById(R.id.entry_fruit_list);
             entryDate = itemView.findViewById(R.id.entry_date);
+            entryDate.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            adapterGlue.getEntry(entry);
+            adapterGlue.attachEntry(entry);
         }
 
         public void setEntry(Entry entry){
             this.entry = entry;
             entryDate.setText(entry.getDate());
-            EditFruitAdapter editFruitAdapter = new EditFruitAdapter(activity, entry.getFruitList(), false);
+            EditFruitAdapter editFruitAdapter = new EditFruitAdapter(activity, entry, false);
             fruitRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
             fruitRecyclerView.setAdapter(editFruitAdapter);
         }

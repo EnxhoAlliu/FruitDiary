@@ -14,10 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fruitdiary.R;
+import com.example.fruitdiary.adapters.AdapterGlue;
 import com.example.fruitdiary.adapters.FruitAdapter;
+import com.example.fruitdiary.models.Entry;
+import com.example.fruitdiary.models.Fruit;
 
 
-public class FruitFragment extends Fragment {
+public class FruitFragment extends Fragment implements AdapterGlue {
 
     private RecyclerView recyclerView;
 
@@ -41,8 +44,18 @@ public class FruitFragment extends Fragment {
     }
 
     private void showList(){
-        FruitAdapter fruitAdapter = new FruitAdapter(getActivity());
+        FruitAdapter fruitAdapter = new FruitAdapter(getActivity(), false, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(fruitAdapter);
+    }
+
+    @Override
+    public void attachEntry(Entry entry) {
+
+    }
+
+    @Override
+    public void attachFruit(Fruit fruit) {
+
     }
 }

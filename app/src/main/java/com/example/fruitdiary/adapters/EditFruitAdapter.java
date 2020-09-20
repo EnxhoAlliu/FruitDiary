@@ -13,20 +13,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fruitdiary.R;
 import com.example.fruitdiary.Utils;
+import com.example.fruitdiary.models.Entry;
 import com.example.fruitdiary.models.EntryFruitDetails;
 import com.example.fruitdiary.models.Fruit;
+import com.example.fruitdiary.presenters.EntryPresenter;
 import com.example.fruitdiary.presenters.FruitPresenter;
+import com.example.fruitdiary.server.ServerSync;
 
 import java.util.List;
+
+import retrofit2.Response;
 
 public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyViewHolder> {
 
     private List<EntryFruitDetails> entryFruitDetails;
     private Activity activity;
     private boolean showButtons;
+    private Entry entry;
 
-    public EditFruitAdapter(Activity activity, List<EntryFruitDetails> entryFruitDetails, boolean showButtons){
-        this.entryFruitDetails= entryFruitDetails;
+    public EditFruitAdapter(Activity activity, Entry entry, boolean showButtons){
+        this.entry = entry;
+        this.entryFruitDetails= entry.getFruitList();
         this.activity = activity;
         this.showButtons = showButtons;
 
@@ -49,7 +56,7 @@ public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyV
         return entryFruitDetails.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, ServerSync {
 
         private TextView fruitName;
         private TextView fruitVitamins;
@@ -57,6 +64,7 @@ public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyV
         private Button increaseAmount;
         private Button decreaseAmout;
         private TextView amountView;
+        private int amount;
         private Fruit fruit;
 
 
@@ -71,16 +79,25 @@ public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyV
             if(!showButtons){
                 increaseAmount.setVisibility(View.GONE);
                 decreaseAmout.setVisibility(View.GONE);
+            }else{
+                increaseAmount.setOnClickListener(this);
+                decreaseAmout.setOnClickListener(this);
             }
+
         }
 
         void setFruitDetails(EntryFruitDetails entryFruitDetails){
             fruitName.setText(entryFruitDetails.getType());
-            amountView.setText(activity.getString(R.string.eaten) + entryFruitDetails.getAmount());
+            amount = entryFruitDetails.getAmount();
+            amountView.setText(activity.getString(R.string.eaten) + amount);
             findFruit(entryFruitDetails);
-            fruitVitamins.setText(activity.getString(R.string.vitamins) + calculateVitamins(entryFruitDetails));
+            fruitVitamins.setText(activity.getString(R.string.vitamins) + calculateVitamins(entryFruitDetails.getAmount()));
             Glide.with(activity).load(Utils.BASE_URL + fruit.getImageRelativePath()).into(imageView);
         }
+
+
+
+
 
         void findFruit(EntryFruitDetails entryFruitDetails){
 
@@ -92,12 +109,48 @@ public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyV
             }
         }
 
-        int calculateVitamins(EntryFruitDetails entryFruitDetails){
-            return  entryFruitDetails.getAmount() * fruit.getVitamins();
+
+        int calculateVitamins(int amount){
+            return amount * fruit.getVitamins();
         }
 
         @Override
         public void onClick(View v) {
+            if(v.getId() == increaseAmount.getId()){
+                increaseFruitNumber();
+            }else if(v.getId() == decreaseAmout.getId()){
+                decreaseFruitNumber();
+            }
+        }
+
+        private void increaseFruitNumber(){
+            amount += 1;
+            new EntryPresenter(this).addFruitToEntry(entry.getId(), fruit.getId(), amount);
+        }
+
+        private void decreaseFruitNumber(){
+            if(amount == 0){
+                return;
+            }
+            amount -= 1;
+            new EntryPresenter(this).addFruitToEntry(entry.getId(), fruit.getId(), amount);
+        }
+
+        @Override
+        public void sync(Object object) {
+            if(object != null){
+                amountView.setText(activity.getString(R.string.eaten) + amount);
+                fruitVitamins.setText(activity.getString(R.string.vitamins) + calculateVitamins(amount));
+            }
+        }
+
+        @Override
+        public void sync(Response response) {
+
+        }
+
+        @Override
+        public void syncEntries(List<Entry> entries) {
 
         }
     }

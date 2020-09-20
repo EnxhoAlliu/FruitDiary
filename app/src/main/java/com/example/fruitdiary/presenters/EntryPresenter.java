@@ -42,11 +42,31 @@ public class EntryPresenter extends Presenter {
     }
 
     public void deleteEntry(int entryID){
-        RetrofitClient.getAPIService().deleteSpecificEntry(entryID);
+        RetrofitClient.getAPIService().deleteSpecificEntry(entryID).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                serverSync.sync(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
     }
 
     public void addFruitToEntry(int entryID, int fruitID, int fruitAmount){
+        RetrofitClient.getAPIService().addFruitToEntry(entryID, fruitID, fruitAmount).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                    serverSync.sync(response.body());
+            }
 
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
     }
 
 }
