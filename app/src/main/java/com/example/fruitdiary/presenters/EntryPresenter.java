@@ -9,17 +9,15 @@ import com.example.fruitdiary.server.ServerSync;
 
 import java.util.List;
 
-import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EntryPresenter extends Presenter {
+public class EntryPresenter {
     private static final String TAG = "ENTRY_PRESENTER";
     private ServerSync serverSync;
 
-    @Inject
     public EntryPresenter(ServerSync serverSync) {
         this.serverSync = serverSync;
     }

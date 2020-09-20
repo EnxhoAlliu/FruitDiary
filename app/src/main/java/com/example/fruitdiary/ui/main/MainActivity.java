@@ -6,6 +6,8 @@ import com.example.fruitdiary.server.ServerSync;
 import com.example.fruitdiary.R;
 import com.example.fruitdiary.models.Entry;
 import com.example.fruitdiary.presenters.FruitPresenter;
+import com.example.fruitdiary.ui.main.fragments.EntriesFragment;
+import com.example.fruitdiary.ui.main.fragments.FruitFragment;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.app.AppCompatActivity;

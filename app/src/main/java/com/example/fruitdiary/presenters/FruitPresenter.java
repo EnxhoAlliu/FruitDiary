@@ -14,7 +14,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FruitPresenter extends Presenter {
+public class FruitPresenter{
 
     private static final String TAG = "FRUIT_PRESENTER";
     public static List<Fruit> FRUIT_LIST;

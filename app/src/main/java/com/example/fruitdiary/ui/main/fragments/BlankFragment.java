@@ -1,4 +1,4 @@
-package com.example.fruitdiary.ui.main;
+package com.example.fruitdiary.ui.main.fragments;
 
 import android.os.Bundle;
 

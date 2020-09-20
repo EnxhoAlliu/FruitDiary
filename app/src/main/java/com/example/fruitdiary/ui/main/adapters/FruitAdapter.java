@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.fruitdiary.R;
 import com.example.fruitdiary.Utils;
 import com.example.fruitdiary.models.Entry;
@@ -60,7 +61,7 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.MyViewHolder
         holder.fruitName.setText(fruit.getType());
         holder.fruitVitamins.setText(activity.getString(R.string.vitamins) + fruit.getVitamins());
         holder.fruit = fruit;
-        Glide.with(activity).load(Utils.BASE_URL + fruit.getImageRelativePath()).into(holder.imageView);
+        Glide.with(activity).load(Utils.BASE_URL + fruit.getImageRelativePath()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.imageView);
     }
 
     @Override
