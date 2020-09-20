@@ -2,6 +2,7 @@ package com.example.fruitdiary.presenters;
 
 import android.util.Log;
 
+import com.example.fruitdiary.APISync;
 import com.example.fruitdiary.models.Fruit;
 import com.example.fruitdiary.RetrofitClient;
 
@@ -18,11 +19,11 @@ import retrofit2.Response;
 public class FruitPresenter extends Presenter {
     private static final String TAG = "FRUIT_PRESENTER";
 
-    public FruitPresenter(){
+    public FruitPresenter(final APISync apiSync){
         RetrofitClient.getAPIService().getFruits().enqueue(new Callback<List<Fruit>>() {
             @Override
             public void onResponse(Call<List<Fruit>> call, Response<List<Fruit>> response) {
-                Log.i(TAG, call.toString() + " ,,  " + response.toString() );
+                apiSync.syncFruits(response.body());
             }
 
             @Override

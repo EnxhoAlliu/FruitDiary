@@ -12,9 +12,10 @@ import retrofit2.Retrofit;
 
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.fruitdiary.Utils.BASE_URL;
+
 public class RetrofitClient {
 
-    private static final String baseUrl = "https://fruitdiary.test.themobilelife.com/";
     private static final int timeOut = 2;
     private static Retrofit retrofitClient;
     private Gson gson = new GsonBuilder().setLenient().create();
@@ -29,7 +30,7 @@ public class RetrofitClient {
 
     private Retrofit createRetrofitClient(){
         return new Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(createHttpClient())
                 .build();

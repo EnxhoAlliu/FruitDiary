@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">FruitDiary</string>
-    <string name="tab_text_1">Entries</string>
-    <string name="tab_text_2">About</string>
-    <string name="tab_text_3">Fruits</string>
+    <string-array name="tab_array">
+        <item>Entries</item>
+        <item>Fruits</item>
+        <item>About</item>
+    </string-array>
+
+    <string name="vitamins">Vitamins: </string>
+    <string name="new_entry">New Entry</string>
 </resources>

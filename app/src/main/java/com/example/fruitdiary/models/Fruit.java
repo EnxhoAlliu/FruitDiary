@@ -12,6 +12,23 @@ public class Fruit  implements Parcelable {
     private int vitamins;
     @SerializedName("type")
     private String type;
+
+    public int getId() {
+        return id;
+    }
+
+    public int getVitamins() {
+        return vitamins;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getImageRelativePath() {
+        return imageRelativePath;
+    }
+
     @SerializedName("image")
     private String imageRelativePath;
 
