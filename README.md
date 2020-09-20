@@ -15,7 +15,7 @@ for sending and fetching data and from and to Views(different Fragments and Adap
 
 Communication of Presenters and Views is done through ServerSync interface.
 
-MainActivity is the starting class which contains 3 Tabs but the number of Tabs can be changed by changing the array elements of "tab_array" in the resources
+MainActivity is the starting class which contains 3 Tabs but the number of Tabs can be changed by changing the array elements of "tab_array" in the resources.
 Each tab has its own fragment but all the operations of editing, deleting and adding are done under "My Diary" tab, in EntriesFragment.
 
 EntriesFragment has receyclerView containing all the entries, and each entry item has also a recyclerView containing all the fruits eaten that day.
