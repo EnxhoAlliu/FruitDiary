@@ -2,14 +2,12 @@ package com.example.fruitdiary.presenters;
 
 import android.util.Log;
 
-import com.example.fruitdiary.APISync;
+import com.example.fruitdiary.server.ServerSync;
 import com.example.fruitdiary.models.Fruit;
-import com.example.fruitdiary.RetrofitClient;
+import com.example.fruitdiary.server.RetrofitClient;
 
 import java.util.List;
 
-
-import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,12 +16,13 @@ import retrofit2.Response;
 
 public class FruitPresenter extends Presenter {
     private static final String TAG = "FRUIT_PRESENTER";
+    public static List<Fruit> FRUIT_LIST;
 
-    public FruitPresenter(final APISync apiSync){
+    public FruitPresenter(final ServerSync serverSync){
         RetrofitClient.getAPIService().getFruits().enqueue(new Callback<List<Fruit>>() {
             @Override
             public void onResponse(Call<List<Fruit>> call, Response<List<Fruit>> response) {
-                apiSync.syncFruits(response.body());
+                FRUIT_LIST = response.body();
             }
 
             @Override

@@ -1,4 +1,4 @@
-package com.example.fruitdiary;
+package com.example.fruitdiary.server;
 
 
 import com.google.gson.Gson;

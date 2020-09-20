@@ -13,6 +13,30 @@ public class EntryFruitDetails implements Parcelable {
     @SerializedName("amount")
     private int amount;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
     protected EntryFruitDetails(Parcel in) {
         id = in.readInt();
         type = in.readString();

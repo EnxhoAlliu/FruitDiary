@@ -3,7 +3,8 @@ package com.example.fruitdiary.presenters;
 import android.util.Log;
 
 import com.example.fruitdiary.models.Entry;
-import com.example.fruitdiary.RetrofitClient;
+import com.example.fruitdiary.server.RetrofitClient;
+import com.example.fruitdiary.server.ServerSync;
 
 import java.util.List;
 
@@ -15,17 +16,18 @@ import retrofit2.Response;
 
 public class EntryPresenter extends Presenter {
     private static final String TAG = "ENTRY_PRESENTER";
+    private ServerSync serverSync;
 
     @Inject
-    public EntryPresenter() {
-
+    public EntryPresenter(ServerSync serverSync) {
+        this.serverSync = serverSync;
     }
 
     public void getEntries(){
         RetrofitClient.getAPIService().getEntries().enqueue(new Callback<List<Entry>>() {
             @Override
             public void onResponse(Call<List<Entry>> call, Response<List<Entry>> response) {
-                Log.i(TAG, call.toString() + " ,,  " + response.toString());
+                serverSync.syncEntries(response.body());
             }
 
             @Override

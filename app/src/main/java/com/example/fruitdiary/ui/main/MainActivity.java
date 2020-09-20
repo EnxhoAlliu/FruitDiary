@@ -2,14 +2,14 @@ package com.example.fruitdiary.ui.main;
 
 import android.os.Bundle;
 
-import com.example.fruitdiary.APISync;
+import com.example.fruitdiary.adapters.EntriesAdapter;
+import com.example.fruitdiary.server.ServerSync;
 import com.example.fruitdiary.R;
-import com.example.fruitdiary.Utils;
 import com.example.fruitdiary.models.Entry;
-import com.example.fruitdiary.models.Fruit;
 import com.example.fruitdiary.presenters.FruitPresenter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,8 +23,10 @@ import retrofit2.Response;
 import toothpick.Scope;
 import toothpick.Toothpick;
 
-public class MainActivity extends AppCompatActivity implements APISync {
+public class MainActivity extends AppCompatActivity implements ServerSync {
 
+    private FruitFragment fruitFragment;
+    private EntriesFragment entriesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,25 +78,37 @@ public class MainActivity extends AppCompatActivity implements APISync {
     }
 
     private void openEntriesFragment(){
-
+        removeFragment(fruitFragment);
+        entriesFragment = new EntriesFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,entriesFragment).commitAllowingStateLoss();
     }
 
+
     private void openFruitsFragment(){
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new FruitFragment()).commitAllowingStateLoss();
+        removeFragment(entriesFragment);
+        fruitFragment = new FruitFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,fruitFragment).commitAllowingStateLoss();
     }
 
     private void openAboutFragment(){
 
     }
 
+    private void removeFragment(Fragment fragment){
+        if(fragment == null){
+            return;
+        }
+        getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
+    }
+
     @Override
-    public void sync(Response response) {
+    public void sync(Object object) {
 
     }
 
     @Override
-    public void syncFruits(List<Fruit> fruits) {
-        Utils.FRUIT_LIST = fruits;
+    public void sync(Response response) {
+
     }
 
     @Override

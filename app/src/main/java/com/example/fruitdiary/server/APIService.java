@@ -1,4 +1,4 @@
-package com.example.fruitdiary;
+package com.example.fruitdiary.server;
 
 import com.example.fruitdiary.models.Entry;
 import com.example.fruitdiary.models.Fruit;

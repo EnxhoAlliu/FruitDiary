@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.example.fruitdiary.R;
 import com.example.fruitdiary.Utils;
 import com.example.fruitdiary.models.Fruit;
+import com.example.fruitdiary.presenters.FruitPresenter;
 
 public class FruitAdapter extends  RecyclerView.Adapter<FruitAdapter.MyViewHolder> {
 
@@ -32,7 +33,7 @@ public class FruitAdapter extends  RecyclerView.Adapter<FruitAdapter.MyViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull FruitAdapter.MyViewHolder holder, int position) {
-        Fruit fruit = Utils.FRUIT_LIST.get(position);
+        Fruit fruit = FruitPresenter.FRUIT_LIST.get(position);
         holder.fruitName.setText(fruit.getType());
         holder.fruitVitamins.setText(activity.getString(R.string.vitamins) + fruit.getVitamins());
         Glide.with(activity).load(Utils.BASE_URL + fruit.getImageRelativePath()).into(holder.imageView);
@@ -40,10 +41,10 @@ public class FruitAdapter extends  RecyclerView.Adapter<FruitAdapter.MyViewHolde
 
     @Override
     public int getItemCount() {
-        return Utils.FRUIT_LIST.size();
+        return FruitPresenter.FRUIT_LIST.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView fruitName;
         private TextView fruitVitamins;
@@ -55,10 +56,6 @@ public class FruitAdapter extends  RecyclerView.Adapter<FruitAdapter.MyViewHolde
             fruitName = view.findViewById(R.id.fruit_name);
             fruitVitamins = view.findViewById(R.id.vitamin_amount);
             imageView = view.findViewById(R.id.fruit_picture);
-        }
-        @Override
-        public void onClick(View v) {
-
         }
     }
 }

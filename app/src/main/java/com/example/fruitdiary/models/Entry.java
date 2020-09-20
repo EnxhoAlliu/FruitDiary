@@ -14,7 +14,20 @@ public class Entry implements Parcelable {
     @SerializedName("date")
     private String date;
     @SerializedName("fruit")
-    List<EntryFruitDetails> fruitList;
+    private List<EntryFruitDetails> fruitList;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public List<EntryFruitDetails> getFruitList() {
+        return fruitList;
+    }
+
 
     protected Entry(Parcel in) {
         id = in.readInt();
