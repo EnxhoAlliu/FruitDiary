@@ -1,4 +1,4 @@
-package com.example.fruitdiary.adapters;
+package com.example.fruitdiary.ui.main.adapters;
 
 import android.app.Activity;
 import android.view.View;

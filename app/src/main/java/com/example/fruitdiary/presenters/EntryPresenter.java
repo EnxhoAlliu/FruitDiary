@@ -2,6 +2,7 @@ package com.example.fruitdiary.presenters;
 
 import android.util.Log;
 
+import com.example.fruitdiary.models.DateEntry;
 import com.example.fruitdiary.models.Entry;
 import com.example.fruitdiary.server.RetrofitClient;
 import com.example.fruitdiary.server.ServerSync;
@@ -60,6 +61,21 @@ public class EntryPresenter extends Presenter {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                     serverSync.sync(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void addNewEntry(String date){
+        DateEntry dateEntry = new DateEntry(date);
+        RetrofitClient.getAPIService().addNewEntry(dateEntry).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                serverSync.sync(response.body());
             }
 
             @Override

@@ -1,4 +1,4 @@
-package com.example.fruitdiary.adapters;
+package com.example.fruitdiary.ui.main.adapters;
 
 import android.app.Activity;
 import android.view.View;
@@ -23,6 +23,8 @@ import com.example.fruitdiary.server.ServerSync;
 import java.util.List;
 
 import retrofit2.Response;
+
+import static com.example.fruitdiary.Utils.findFruit;
 
 public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyViewHolder> {
 
@@ -90,23 +92,9 @@ public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyV
             fruitName.setText(entryFruitDetails.getType());
             amount = entryFruitDetails.getAmount();
             amountView.setText(activity.getString(R.string.eaten) + amount);
-            findFruit(entryFruitDetails);
+            fruit = findFruit(entryFruitDetails);
             fruitVitamins.setText(activity.getString(R.string.vitamins) + calculateVitamins(entryFruitDetails.getAmount()));
             Glide.with(activity).load(Utils.BASE_URL + fruit.getImageRelativePath()).into(imageView);
-        }
-
-
-
-
-
-        void findFruit(EntryFruitDetails entryFruitDetails){
-
-            for(Fruit fruit: FruitPresenter.FRUIT_LIST){
-                if(entryFruitDetails.getId() == fruit.getId()){
-                    this.fruit = fruit;
-                    break;
-                }
-            }
         }
 
 

@@ -1,4 +1,4 @@
-package com.example.fruitdiary.adapters;
+package com.example.fruitdiary.ui.main.adapters;
 
 import com.example.fruitdiary.models.Entry;
 import com.example.fruitdiary.models.Fruit;

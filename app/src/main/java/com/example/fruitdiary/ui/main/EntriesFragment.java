@@ -1,11 +1,12 @@
 package com.example.fruitdiary.ui.main;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,10 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fruitdiary.R;
-import com.example.fruitdiary.adapters.AdapterGlue;
-import com.example.fruitdiary.adapters.EditFruitAdapter;
-import com.example.fruitdiary.adapters.EntriesAdapter;
-import com.example.fruitdiary.adapters.FruitAdapter;
+import com.example.fruitdiary.ui.main.adapters.AdapterGlue;
+import com.example.fruitdiary.ui.main.adapters.EditFruitAdapter;
+import com.example.fruitdiary.ui.main.adapters.EntriesAdapter;
+import com.example.fruitdiary.ui.main.adapters.FruitAdapter;
 import com.example.fruitdiary.models.Entry;
 import com.example.fruitdiary.models.Fruit;
 import com.example.fruitdiary.presenters.EntryPresenter;
@@ -34,12 +35,16 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
     private RecyclerView selectedEntryFruitsRecyclerView;
     private RecyclerView selectFruitRecyclerView;
     private Button newEntry;
+    private Button createEntry;
     private Button deleteEntry;
     private Button addEntryFruit;
     private Button exitEntryEditing;
+    private Button exitNewEntry;
     private TextView selectedEntryDate;
+    private EditText addDateText;
     private Entry selectedEntry;
     private View editEntryView;
+    private View newEntryView;
 
 
     @Nullable
@@ -54,6 +59,7 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
         super.onViewCreated(view, savedInstanceState);
         findViews(view);
         requestEntriesList();
+        setEditModeFunctionality();
     }
 
     private void findViews(View view){
@@ -61,11 +67,15 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
         selectedEntryFruitsRecyclerView = view.findViewById(R.id.entry_fruit_full_list);
         selectFruitRecyclerView = view.findViewById(R.id.pick_fruit_list);
         newEntry = view.findViewById(R.id.new_entry);
+        createEntry = view.findViewById(R.id.create_entry_button);
         deleteEntry = view.findViewById(R.id.delete_entry);
         addEntryFruit = view.findViewById(R.id.add_fruit);
         exitEntryEditing = view.findViewById(R.id.exit_button);
+        exitNewEntry = view.findViewById(R.id.exit_new_entry_button);
         editEntryView = view.findViewById(R.id.detailed_view);
         selectedEntryDate = view.findViewById(R.id.entry_detail_date);
+        addDateText = view.findViewById(R.id.add_entry_date);
+        newEntryView = view.findViewById(R.id.create_entry);
     }
 
     private void fillEntriesList(List<Entry> entryList){
@@ -78,13 +88,13 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
     }
 
     private void requestEntriesList(){
+        hideEditEntryView();
         new EntryPresenter(this).getEntries();
     }
 
     private void openEntryEditing(Entry entry){
         hideEntriesList();
         fillEditEntryViewWithSelectedEntry(entry);
-        setEditModeFunctionality();
         editEntryView.setVisibility(View.VISIBLE);
     }
 
@@ -108,7 +118,6 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
         exitEntryEditing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideEditEntryView();
                 requestEntriesList();
             }
         });
@@ -124,6 +133,29 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
                 displayFruitList();
             }
         });
+        newEntry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createNewEntryDialog();
+                hideEntriesList();
+            }
+        });
+        exitNewEntry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestEntriesList();
+            }
+        });
+        createEntry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewEntry();
+            }
+        });
+    }
+
+    private void createNewEntryDialog(){
+        newEntryView.setVisibility(View.VISIBLE);
     }
 
     private void removeEntry(){
@@ -132,6 +164,7 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
 
     private void hideEditEntryView(){
         editEntryView.setVisibility(View.GONE);
+        newEntryView.setVisibility(View.GONE);
     }
 
     private void displayFruitList(){
@@ -141,11 +174,17 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
         selectFruitRecyclerView.setVisibility(View.VISIBLE);
     }
 
+    private void addNewEntry(){
+        String date = addDateText.getText().toString();
+        if(date != null && date.length() != 0){
+            new EntryPresenter(this).addNewEntry(date);
+        }
+    }
+
 
     @Override
     public void sync(Object object) {
         if(object != null){
-            hideEditEntryView();
             requestEntriesList();
         }
     }

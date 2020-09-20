@@ -2,7 +2,6 @@ package com.example.fruitdiary.ui.main;
 
 import android.os.Bundle;
 
-import com.example.fruitdiary.adapters.EntriesAdapter;
 import com.example.fruitdiary.server.ServerSync;
 import com.example.fruitdiary.R;
 import com.example.fruitdiary.models.Entry;
