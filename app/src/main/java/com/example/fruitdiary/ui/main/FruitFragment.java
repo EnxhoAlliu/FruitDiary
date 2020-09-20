@@ -22,6 +22,16 @@ public class FruitFragment extends Fragment implements AdapterGlue {
 
     private RecyclerView recyclerView;
 
+
+    public static FruitFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        FruitFragment fragment = new FruitFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

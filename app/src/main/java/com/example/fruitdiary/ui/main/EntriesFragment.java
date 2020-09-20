@@ -47,6 +47,14 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
     private View newEntryView;
 
 
+     public static EntriesFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        EntriesFragment fragment = new EntriesFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

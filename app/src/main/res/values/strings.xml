@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FruitDiary</string>
     <string-array name="tab_array">
-        <item>Entries</item>
+        <item>My Diary</item>
         <item>Fruits</item>
         <item>About</item>
     </string-array>

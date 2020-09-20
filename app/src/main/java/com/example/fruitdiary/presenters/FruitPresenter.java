@@ -15,14 +15,21 @@ import retrofit2.Response;
 
 
 public class FruitPresenter extends Presenter {
+
     private static final String TAG = "FRUIT_PRESENTER";
     public static List<Fruit> FRUIT_LIST;
+    ServerSync serverSync;
 
     public FruitPresenter(final ServerSync serverSync){
+       this.serverSync = serverSync;
+    }
+
+    public void getFruitList(){
         RetrofitClient.getAPIService().getFruits().enqueue(new Callback<List<Fruit>>() {
             @Override
             public void onResponse(Call<List<Fruit>> call, Response<List<Fruit>> response) {
                 FRUIT_LIST = response.body();
+                serverSync.sync(true);
             }
 
             @Override
@@ -30,7 +37,6 @@ public class FruitPresenter extends Presenter {
                 Log.i(TAG, call.toString() + " ,,  " + t.toString() );
             }
         });
-
     }
 
 }

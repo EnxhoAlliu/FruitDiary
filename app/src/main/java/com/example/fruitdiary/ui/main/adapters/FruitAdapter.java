@@ -12,10 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fruitdiary.R;
 import com.example.fruitdiary.Utils;
+import com.example.fruitdiary.models.Entry;
 import com.example.fruitdiary.models.Fruit;
 import com.example.fruitdiary.presenters.FruitPresenter;
+import com.example.fruitdiary.server.ServerSync;
 
-public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.MyViewHolder> {
+import java.util.List;
+
+import retrofit2.Response;
+
+public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.MyViewHolder> implements ServerSync {
 
     private Activity activity;
     private boolean pickMode;
@@ -42,6 +48,14 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull FruitAdapter.MyViewHolder holder, int position) {
+        if (FruitPresenter.FRUIT_LIST == null) {
+            new FruitPresenter(this).getFruitList();
+        } else {
+            addInfoToHolder(holder, position);
+        }
+    }
+
+    private void addInfoToHolder(@NonNull FruitAdapter.MyViewHolder holder, int position) {
         Fruit fruit = FruitPresenter.FRUIT_LIST.get(position);
         holder.fruitName.setText(fruit.getType());
         holder.fruitVitamins.setText(activity.getString(R.string.vitamins) + fruit.getVitamins());
@@ -52,6 +66,21 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.MyViewHolder
     @Override
     public int getItemCount() {
         return FruitPresenter.FRUIT_LIST.size();
+    }
+
+    @Override
+    public void sync(Object object) {
+
+    }
+
+    @Override
+    public void sync(Response response) {
+
+    }
+
+    @Override
+    public void syncEntries(List<Entry> entries) {
+
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
