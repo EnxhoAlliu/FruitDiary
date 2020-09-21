@@ -5,7 +5,7 @@ FruitDiary is an Android app where you can memorize fruits you have eaten each d
 
 ### External libraries used are
 
- 1.Retrofit for communicating with API, sending and receiving data
+ 1.Retrofit for communicating with API, sending and receiving data    
  2.Glide to download and display images
   
 ## Structure
@@ -22,7 +22,10 @@ Each tab has its own fragment but all the operations of editing, deleting and ad
 ### After adding a new entry, going back from editing an entry or deleting an entry, the Entries list will be updated
 
 EntriesFragment has receyclerView containing all the entries, and each entry item has also a recyclerView containing all the fruits eaten that day.
-You can add an entry by clicking "New Entry" button which will ask you to enter the date.By clicking "Create" it will update Entries in the server and if succesfull it will send you back you to EntriesFragment with the updated list from server where you can edit the newly created entry.
+
+You can add an entry by clicking "New Entry" button which will ask you to enter the date.By clicking "Create" it will update Entries in the server and if succesfull 
+it will send you back you to EntriesFragment with the updated list from server where you can edit the newly created entry.
+
 You can edit an entry by clicking on its date and this will simply open a view inside the fragment where you can can add and edit the fruits, and delete this entry.
 
 
