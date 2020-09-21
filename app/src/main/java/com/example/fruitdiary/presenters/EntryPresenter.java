@@ -16,13 +16,18 @@ import retrofit2.Response;
 
 public class EntryPresenter {
     private static final String TAG = "ENTRY_PRESENTER";
+    public static final int DELETE_ENTRY_REQ_CODE = 888;
+    public static final int GET_ENTRIES_REQ_CODE = 111;
+    public static final int DELETE_ALL_ENTRIES_REQ_CODE = 999;
+    public static final int ADD_FRUIT_TO_ENTRY_RQ_CODE = 122;
+    public static final int NEW_ENTRY_RQ_CODE = 133;
     private ServerSync serverSync;
 
     public EntryPresenter(ServerSync serverSync) {
         this.serverSync = serverSync;
     }
 
-    public void getEntries(){
+    public void getEntries() {
         RetrofitClient.getAPIService().getEntries().enqueue(new Callback<List<Entry>>() {
             @Override
             public void onResponse(Call<List<Entry>> call, Response<List<Entry>> response) {
@@ -36,15 +41,25 @@ public class EntryPresenter {
         });
     }
 
-    public void deleteAllEntries(){
-        RetrofitClient.getAPIService().deleteAllEntries();
+    public void deleteAllEntries() {
+        RetrofitClient.getAPIService().deleteAllEntries().enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                    send(response.body(), DELETE_ALL_ENTRIES_REQ_CODE);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
     }
 
-    public void deleteEntry(int entryID){
+    public void deleteEntry(int entryID) {
         RetrofitClient.getAPIService().deleteSpecificEntry(entryID).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                serverSync.sync(response.body());
+                send(response.body(), DELETE_ENTRY_REQ_CODE);
             }
 
             @Override
@@ -54,11 +69,12 @@ public class EntryPresenter {
         });
     }
 
-    public void addFruitToEntry(int entryID, int fruitID, int fruitAmount){
+    public void addFruitToEntry(int entryID, int fruitID, int fruitAmount) {
         RetrofitClient.getAPIService().addFruitToEntry(entryID, fruitID, fruitAmount).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                    serverSync.sync(response.body());
+                send(response.body(), ADD_FRUIT_TO_ENTRY_RQ_CODE);
+                Log.i(TAG, response.body().toString());
             }
 
             @Override
@@ -68,12 +84,12 @@ public class EntryPresenter {
         });
     }
 
-    public void addNewEntry(String date){
+    public void addNewEntry(String date) {
         DateEntry dateEntry = new DateEntry(date);
         RetrofitClient.getAPIService().addNewEntry(dateEntry).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                serverSync.sync(response.body());
+                send(response.body(), NEW_ENTRY_RQ_CODE);
             }
 
             @Override
@@ -81,6 +97,13 @@ public class EntryPresenter {
 
             }
         });
+    }
+
+    private void send(Object object, int requestCode) {
+        if (object == null)
+            serverSync.sync(null, 0);
+        else
+            serverSync.sync(object, requestCode);
     }
 
 }

@@ -19,24 +19,31 @@ import com.example.fruitdiary.ui.main.fragments.FruitFragment;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private final Context mContext;
+    private FragmentWatcher fragmentWatcher;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    public SectionsPagerAdapter(Context context, FragmentManager fm, FragmentWatcher fragmentWatcher) {
         super(fm);
         mContext = context;
+        this.fragmentWatcher = fragmentWatcher;
     }
 
     @Override
     public Fragment getItem(int position) {
-
+        Fragment fragment;
         switch(position){
             case 0:
-                return EntriesFragment.newInstance();
+                fragment =  EntriesFragment.newInstance();
+                fragmentWatcher.watchFragment(fragment);
+                break;
             case 1:
-                return FruitFragment.newInstance();
+                fragment =  FruitFragment.newInstance();
+                break;
             case 2:
             default:
-                return BlankFragment.newInstance();
+                fragment =  BlankFragment.newInstance();
         }
+
+        return fragment;
     }
 
     @Nullable

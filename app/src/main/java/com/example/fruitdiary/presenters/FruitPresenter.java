@@ -17,6 +17,7 @@ import retrofit2.Response;
 public class FruitPresenter{
 
     private static final String TAG = "FRUIT_PRESENTER";
+    public static int GET_FRUIT_LIST_RQ_CODE = 200;
     public static List<Fruit> FRUIT_LIST;
     ServerSync serverSync;
 
@@ -28,8 +29,10 @@ public class FruitPresenter{
         RetrofitClient.getAPIService().getFruits().enqueue(new Callback<List<Fruit>>() {
             @Override
             public void onResponse(Call<List<Fruit>> call, Response<List<Fruit>> response) {
+                if(response.body() == null)
+                    return;
                 FRUIT_LIST = response.body();
-                serverSync.sync(true);
+                serverSync.sync(true, GET_FRUIT_LIST_RQ_CODE);
             }
 
             @Override

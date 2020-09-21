@@ -27,7 +27,7 @@ public interface APIService {
     Call<List<Entry>> getEntries();
 
     @DELETE("api/entries")
-    void deleteAllEntries();
+    Call<Object> deleteAllEntries();
 
     @DELETE("api/entry/{entryId}")
     Call<Object> deleteSpecificEntry(

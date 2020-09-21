@@ -17,7 +17,6 @@ import com.example.fruitdiary.models.Entry;
 import com.example.fruitdiary.models.EntryFruitDetails;
 import com.example.fruitdiary.models.Fruit;
 import com.example.fruitdiary.presenters.EntryPresenter;
-import com.example.fruitdiary.presenters.FruitPresenter;
 import com.example.fruitdiary.server.ServerSync;
 
 import java.util.List;
@@ -25,6 +24,7 @@ import java.util.List;
 import retrofit2.Response;
 
 import static com.example.fruitdiary.Utils.findFruit;
+import static com.example.fruitdiary.presenters.EntryPresenter.ADD_FRUIT_TO_ENTRY_RQ_CODE;
 
 public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyViewHolder> {
 
@@ -67,6 +67,7 @@ public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyV
         private Button decreaseAmout;
         private TextView amountView;
         private int amount;
+        private int amountBckp;
         private Fruit fruit;
 
 
@@ -112,6 +113,7 @@ public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyV
         }
 
         private void increaseFruitNumber(){
+            amountBckp = amount;
             amount += 1;
             new EntryPresenter(this).addFruitToEntry(entry.getId(), fruit.getId(), amount);
         }
@@ -120,21 +122,19 @@ public class EditFruitAdapter extends  RecyclerView.Adapter<EditFruitAdapter.MyV
             if(amount == 0){
                 return;
             }
+            amountBckp = amount;
             amount -= 1;
             new EntryPresenter(this).addFruitToEntry(entry.getId(), fruit.getId(), amount);
         }
 
         @Override
-        public void sync(Object object) {
-            if(object != null){
+        public void sync(Object object, int requestCode) {
+            if(requestCode == ADD_FRUIT_TO_ENTRY_RQ_CODE){
                 amountView.setText(activity.getString(R.string.eaten) + amount);
                 fruitVitamins.setText(activity.getString(R.string.vitamins) + calculateVitamins(amount));
+            }else if(requestCode == 0){
+                amount = amountBckp;
             }
-        }
-
-        @Override
-        public void sync(Response response) {
-
         }
 
         @Override

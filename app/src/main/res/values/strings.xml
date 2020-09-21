@@ -9,4 +9,9 @@
     <string name="vitamins">Vitamins: </string>
     <string name="new_entry">New Entry</string>
     <string name="eaten">Eaten: </string>
+    <string name="delete_date">Delete Date</string>
+    <string name="add_fruit">Add fruit</string>
+    <string name="exit">Exit</string>
+    <string name="create">Create</string>
+    <string name="add_entry_hint">Please select date in this fomat: "yyyy-mm-dd"</string>
 </resources>

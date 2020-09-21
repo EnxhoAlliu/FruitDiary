@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,34 +27,36 @@ import com.example.fruitdiary.server.ServerSync;
 
 import java.util.List;
 
-import retrofit2.Response;
-
 public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync {
 
+
     private RecyclerView entriesRecyclerView;
+    private Button newEntry;
+    private Button deleteAllEntries;
+
     private RecyclerView selectedEntryFruitsRecyclerView;
     private RecyclerView selectFruitRecyclerView;
-    private Button newEntry;
-    private Button createEntry;
-    private Button deleteEntry;
     private Button addEntryFruit;
     private Button exitEntryEditing;
-    private Button exitNewEntry;
+    private Button deleteEntry;
     private TextView selectedEntryDate;
-    private EditText addDateText;
-    private Entry selectedEntry;
     private View editEntryView;
+    private Entry selectedEntry;
+
+    private Button createEntry;
+    private Button exitNewEntry;
+    private EditText addDateText;
     private View newEntryView;
 
 
-     public static EntriesFragment newInstance() {
+    public static EntriesFragment newInstance() {
 
         Bundle args = new Bundle();
-
         EntriesFragment fragment = new EntriesFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,136 +72,134 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
         setEditModeFunctionality();
     }
 
-    private void findViews(View view){
+    private void findViews(View view) {
         entriesRecyclerView = view.findViewById(R.id.entries_recycler_view);
-        selectedEntryFruitsRecyclerView = view.findViewById(R.id.entry_fruit_full_list);
-        selectFruitRecyclerView = view.findViewById(R.id.pick_fruit_list);
+        deleteAllEntries = view.findViewById(R.id.delete_all_btn);
         newEntry = view.findViewById(R.id.new_entry);
-        createEntry = view.findViewById(R.id.create_entry_button);
-        deleteEntry = view.findViewById(R.id.delete_entry);
-        addEntryFruit = view.findViewById(R.id.add_fruit);
-        exitEntryEditing = view.findViewById(R.id.exit_button);
-        exitNewEntry = view.findViewById(R.id.exit_new_entry_button);
-        editEntryView = view.findViewById(R.id.detailed_view);
-        selectedEntryDate = view.findViewById(R.id.entry_detail_date);
-        addDateText = view.findViewById(R.id.add_entry_date);
-        newEntryView = view.findViewById(R.id.create_entry);
+
+        editEntryModeViews(view);
+        newEntryModeViews(view);
     }
 
-    private void fillEntriesList(List<Entry> entryList){
+    private void fillEntriesList(List<Entry> entryList) {
         EntriesAdapter entriesAdapter = new EntriesAdapter(getActivity(), entryList, this);
         entriesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         entriesRecyclerView.setAdapter(entriesAdapter);
         //In case their visibility is set to GONE
-        entriesRecyclerView.setVisibility(View.VISIBLE);
-        newEntry.setVisibility(View.VISIBLE);
+        showEntriesList();
     }
 
-    private void requestEntriesList(){
+    private void requestEntriesList() {
         hideEditEntryView();
         new EntryPresenter(this).getEntries();
     }
 
-    private void openEntryEditing(Entry entry){
+    private void openEntryEditing(Entry entry) {
         hideEntriesList();
         fillEditEntryViewWithSelectedEntry(entry);
         editEntryView.setVisibility(View.VISIBLE);
     }
 
-    private void hideEntriesList(){
+    private void hideEntriesList() {
         entriesRecyclerView.setVisibility(View.GONE);
         newEntry.setVisibility(View.GONE);
+        deleteAllEntries.setVisibility(View.GONE);
     }
 
-    private void fillEditEntryViewWithSelectedEntry(Entry entry){
+    public void showEntriesList() {
+        entriesRecyclerView.setVisibility(View.VISIBLE);
+        newEntry.setVisibility(View.VISIBLE);
+        deleteAllEntries.setVisibility(View.VISIBLE);
+    }
+
+
+    private void fillEditEntryViewWithSelectedEntry(Entry entry) {
         displaySelectedEntryFruitList(entry);
         selectedEntryDate.setText(entry.getDate());
     }
 
-    private void displaySelectedEntryFruitList(Entry entry){
+    private void displaySelectedEntryFruitList(Entry entry) {
         EditFruitAdapter editFruitAdapter = new EditFruitAdapter(getActivity(), entry, true);
         selectedEntryFruitsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         selectedEntryFruitsRecyclerView.setAdapter(editFruitAdapter);
     }
 
-    private void setEditModeFunctionality(){
-        exitEntryEditing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestEntriesList();
-            }
-        });
-        deleteEntry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeEntry();
-            }
-        });
-        addEntryFruit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayFruitList();
-            }
-        });
-        newEntry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createNewEntryDialog();
-                hideEntriesList();
-            }
-        });
-        exitNewEntry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestEntriesList();
-            }
-        });
-        createEntry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNewEntry();
-            }
-        });
+    private void setEditModeFunctionality() {
+        entryEditMOde();
+        newEntryMode();
+        deleteAllEntries.setOnClickListener(v -> deleteAllEntries());
     }
 
-    private void createNewEntryDialog(){
+    private void entryEditMOde() {
+        exitEntryEditing.setOnClickListener((v) -> requestEntriesList());
+        deleteEntry.setOnClickListener(v -> removeEntry());
+        addEntryFruit.setOnClickListener(v -> displayFruitList());
+    }
+
+    private void editEntryModeViews(View view){
+        editEntryView = view.findViewById(R.id.detailed_view);
+        selectedEntryFruitsRecyclerView = view.findViewById(R.id.entry_fruit_full_list);
+        selectFruitRecyclerView = view.findViewById(R.id.pick_fruit_list);
+        addEntryFruit = view.findViewById(R.id.add_fruit);
+        exitEntryEditing = view.findViewById(R.id.exit_button);
+        deleteEntry = view.findViewById(R.id.delete_entry);
+        selectedEntryDate = view.findViewById(R.id.entry_detail_date);
+    }
+
+    private void newEntryMode() {
+        newEntry.setOnClickListener(v -> {
+            createNewEntryDialog();
+            hideEntriesList();
+        });
+        exitNewEntry.setOnClickListener(v -> requestEntriesList());
+        createEntry.setOnClickListener(v -> addNewEntry());
+    }
+
+    private void newEntryModeViews(View view){
+        newEntryView = view.findViewById(R.id.create_entry);
+        createEntry = view.findViewById(R.id.create_entry_button);
+        exitNewEntry = view.findViewById(R.id.exit_new_entry_button);
+        addDateText = view.findViewById(R.id.add_entry_date);
+    }
+
+    private void createNewEntryDialog() {
         newEntryView.setVisibility(View.VISIBLE);
     }
 
-    private void removeEntry(){
+    private void removeEntry() {
         new EntryPresenter(this).deleteEntry(selectedEntry.getId());
     }
 
-    private void hideEditEntryView(){
+    public void hideEditEntryView() {
         editEntryView.setVisibility(View.GONE);
         newEntryView.setVisibility(View.GONE);
     }
 
-    private void displayFruitList(){
+    private void displayFruitList() {
         FruitAdapter fruitAdapter = new FruitAdapter(getActivity(), true, this);
         selectFruitRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
         selectFruitRecyclerView.setAdapter(fruitAdapter);
         selectFruitRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void addNewEntry(){
+    private void addNewEntry() {
         String date = addDateText.getText().toString();
-        if(date != null && date.length() != 0){
+        if (date != null && date.length() != 0) {
             new EntryPresenter(this).addNewEntry(date);
         }
     }
 
-
-    @Override
-    public void sync(Object object) {
-        if(object != null){
-            requestEntriesList();
-        }
+    private void deleteAllEntries() {
+        new EntryPresenter(this).deleteAllEntries();
     }
 
-    @Override
-    public void sync(Response response) {
 
+    @Override
+    public void sync(Object object, int requestCode) {
+        if (requestCode != 0) {
+            Toast.makeText(getContext(), "Server response was succesfull", Toast.LENGTH_SHORT).show();
+            requestEntriesList();
+        }
     }
 
     @Override
@@ -222,6 +223,7 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
         new EntryPresenter(this).addFruitToEntry(selectedEntry.getId(), fruit.getId(), 1);
         selectFruitRecyclerView.setVisibility(View.GONE);
     }
+
 
 
 }
