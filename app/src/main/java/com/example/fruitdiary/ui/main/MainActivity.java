@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ServerSync, Fragm
     public void onBackPressed() {
         Handler smallHandler = new Handler();
         if (!backPressed) {
-            ((EntriesFragment) entriesFragment).hideEditEntryView();
+            ((EntriesFragment) entriesFragment).requestEntriesList();
             ((EntriesFragment) entriesFragment).showEntriesList();
             backPressed = true;
             smallHandler.postDelayed(() -> backPressed = false, 700);

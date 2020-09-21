@@ -89,7 +89,7 @@ public class EntriesFragment extends Fragment implements AdapterGlue, ServerSync
         showEntriesList();
     }
 
-    private void requestEntriesList() {
+    public void requestEntriesList() {
         hideEditEntryView();
         new EntryPresenter(this).getEntries();
     }
